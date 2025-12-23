@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Тести Inkscape</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: linear-gradient(120deg, #cce7ff, #eaf6ff);
+        margin: 0;
+        padding: 0;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 40px auto;
+        background: white;
+        padding: 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+    h1, h2 {
+        text-align: center;
+        color: #2c5aa0;
+    }
+
+    .question {
+        margin-top: 20px;
+        display: none;
+    }
+
+    button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        font-size: 16px;
+        border: none;
+        border-radius: 8px;
+        background: #3a7bd5;
+        color: white;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #2c5aa0;
+    }
+
+    .links {
+        margin-top: 30px;
+        text-align: center;
+    }
+
+    .links a {
+        margin: 0 15px;
+        text-decoration: none;
+        font-weight: bold;
+        color: #3a7bd5;
+    }
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Тести з Inkscape</h1>
+
+<div id="start">
+    <p>Введіть ваше імʼя:</p>
+    <input type="text" id="username" placeholder="Ваше імʼя">
+    <br><br>
+    <button onclick="startTest()">Почати тест</button>
+</div>
+
+<div id="test"></div>
+
+<div id="result" style="display:none;">
+    <h2 id="score-text"></h2>
+</div>
+
+<div class="links">
+    <a href="Inkspace.html">⬅ Inkscape</a>
+    <a href="Menu.html"> Меню</a>
+</div>
+
+</div>
+
+<script>
+let username = "";
+let currentQuestion = 0;
+let score = 0;
+
+const questions = [
+{
+q: "1. Яке призначення маркерів обʼєкта в Inkscape?",
+a: [
+"Зміна вигляду штриха",
+"Зміна кольору контура",
+"Зміна форми та/або розміру обʼєкта",
+"Зміна кольору заповнення"
+],
+correct: 2
+},
+{
+q: "2. Що таке градієнт?",
+a: [
+"Відсутність заповнення",
+"Заповнення візерунком",
+"Суцільне заповнення",
+"Плавний перехід від одного кольору до іншого"
+],
+correct: 3
+},
+{
+q: "3. Який тип графіки використовує Inkscape?",
+a: [
+"Растрову",
+"Векторну",
+"Піксельну",
+"Тривимірну"
+],
+correct: 1
+},
+{
+q: "4. Який інструмент використовується для вибору обʼєктів?",
+a: [
+"Перо",
+"Заливка",
+"Стрілка",
+"Лупа"
+],
+correct: 2
+},
+{
+q: "5. Для чого потрібна клавіша Shift при зміні розміру?",
+a: [
+"Для вільного масштабування",
+"Для збереження пропорцій",
+"Для обертання",
+"Для копіювання"
+],
+correct: 1
+},
+{
+q: "6. Що робить інструмент Заливка?",
+a: [
+"Малює лінії",
+"Змінює контур",
+"Заповнює замкнуту область",
+"Видаляє обʼєкти"
+],
+correct: 2
+},
+{
+q: "7. Який формат є векторним?",
+a: [
+"PNG",
+"JPG",
+"SVG",
+"BMP"
+],
+correct: 2
+}
+];
+
+function startTest() {
+    username = document.getElementById("username").value;
+    if (username === "") {
+        alert("Введіть імʼя!");
+        return;
+    }
+    document.getElementById("start").style.display = "none";
+    showQuestion();
+}
+
+function showQuestion() {
+    if (currentQuestion >= questions.length) {
+        showResult();
+        return;
+    }
+
+    const q = questions[currentQuestion];
+    let html = `<div class="question" style="display:block">
+        <p><b>${q.q}</b></p>`;
+
+    q.a.forEach((ans, index) => {
+        html += `
+        <label>
+            <input type="radio" name="answer" value="${index}">
+            ${ans}
+        </label><br>`;
+    });
+
+    html += `<button onclick="nextQuestion()">Далі</button></div>`;
+    document.getElementById("test").innerHTML = html;
+}
+
+function nextQuestion() {
+    const answers = document.getElementsByName("answer");
+    let selected = -1;
+
+    for (let i = 0; i < answers.length; i++) {
+        if (answers[i].checked) selected = i;
+    }
+
+    if (selected === -1) {
+        alert("Оберіть відповідь!");
+        return;
+    }
+
+    if (selected === questions[currentQuestion].correct) {
+        score++;
+    }
+
+    currentQuestion++;
+    showQuestion();
+}
+
+function showResult() {
+    document.getElementById("test").style.display = "none";
+    document.getElementById("result").style.display = "block";
+    document.getElementById("score-text").innerText =
+        `${username}, ви набрали ${score} з ${questions.length} балів.`;
+}
+</script>
+
+</body>
+</html>
